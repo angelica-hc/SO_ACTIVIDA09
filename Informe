@@ -1,1 +1,176 @@
+# Informe general — Actividad 09
 
+**Universidad La Salle · Facultad de Ingeniería**  
+**Curso:** Sistemas Operativos  
+**Docente:** Mg. Maribel Molina Barriga  
+**Integrantes:** angelica-hc, gmamanil-sudu, Diego Zapana, heydycastillo  
+**Fecha:** 15 de noviembre de 2026
+
+---
+
+## 1. Objetivo
+
+Integrar en `main` el trabajo de las cuatro ramas del equipo, revisar cada
+aporte y verificar que todos los programas compilen y funcionen correctamente.
+Los temas desarrollados son:
+
+| Tema | Rama | Integrante |
+|---|---|---|
+| Exclusión mutua y threads | `angelica` | angelica-hc |
+| Monitores | `monitores` | gmamanil-sudu |
+| Filósofos comensales | `heydy` | heydycastillo |
+| Productor-consumidor | `diego` | Diego Zapana |
+
+---
+
+## 2. Estado de las ramas
+
+| Rama | Aporte | Estado |
+|---|---|---|
+| `main` | Integración final | Actualizada y publicada |
+| `angelica` | Esqueleto inicial; su trabajo real se commiteó directo en `main` | Ya contenido en `main` |
+| `monitores` | `Monitores/monitor00–04.cpp` | Fusionada mediante PR #1 |
+| `diego` | Carpeta completa `productor_consumidor/` | Fusionada en `main` |
+| `heydy` | `filosofos_comensales/filosofos.cpp` | Fusionada en `main` |
+
+No hubo conflictos porque cada rama aportó archivos distintos. `main` quedó
+publicada en `origin/main`.
+
+---
+
+## 3. Exclusión mutua
+
+**Archivos:** `Exclusion_Mutua/exclusionMutua00–02.cpp` y
+`Exclusion_Mutua/exclusionmutua_MEJORADO.cpp`.
+
+- `00`: cinco hilos incrementan una variable sin protección. El resultado (25)
+  puede parecer correcto, pero existe una condición de carrera.
+- `01`: mismo defecto con un tope ingresado por el usuario. Con valores grandes
+  se pierden incrementos.
+- `02`: usa `pthread_mutex_lock/unlock`; es correcto, pero la API es manual y
+  depende de que el programador libere siempre el mutex.
+- `MEJORADO`: compara tres estrategias sobre la misma sección crítica:
+  sin protección, `std::mutex` + `lock_guard` y `std::atomic`.
+
+**Verificación:** con 5 hilos × 200 000 iteraciones, `mutex` y `atomic`
+obtuvieron 1 000 000 exactos. Con `demo_carrera=0`, ThreadSanitizer no reporta
+carreras.
+
+---
+
+## 4. Threads
+
+**Archivos:** `Threads/pthreads-example.cpp` y `Threads/threads_MEJORADO.cpp`.
+
+Problemas del original: `rand()` compartido entre hilos, `assert` que
+desaparece con `-DNDEBUG`, salida con `printf` entrelazada y un hilo que no
+devuelve resultado.
+
+La versión mejorada usa `std::async` y `std::future<int>`, un generador
+`mt19937` por hilo, salida serializada con mutex y captura de errores con
+`std::system_error`.
+
+**Verificación:** cuatro hilos con esperas de 200–500 ms sumaron 1300 ms de
+espera y el programa terminó en aproximadamente 500 ms reales, lo que demuestra
+la ejecución concurrente. ThreadSanitizer no reportó avisos.
+
+---
+
+## 5. Monitores
+
+**Archivos:** `Monitores/monitor00–04.cpp`.
+
+Los cinco programas muestran una progresión:
+
+- `monitor00`: monitor con contador y mutex, usando `std::async`.
+- `monitor01`: contador atómico.
+- `monitor02`: mutex y copia del valor dentro de la sección crítica.
+- `monitor03`: impresión incluida dentro del monitor.
+- `monitor04`: monitor compartido con hilos creados explícitamente y `join`.
+
+En todos, el contador y el mutex están encapsulados y se usa un único monitor
+compartido. Los hilos se unen correctamente y no hay fugas de memoria.
+
+**Verificación:** los cinco programas imprimen la secuencia 10, 20, …, 100.
+`monitor04` no presenta avisos con ThreadSanitizer.
+
+---
+
+## 6. Filósofos comensales
+
+**Archivo:** `filosofos_comensales/filosofos.cpp`.
+
+Versión unificada que corrige los problemas de `Completo_1` y `Completo_2`:
+
+- Un tenedor (`mutex`) por filósofo, dimensionado según la cantidad ingresada.
+- `std::lock` adquiere los dos tenedores sin interbloqueo y se liberan
+  explícitamente al terminar de comer.
+- La lectura y escritura de `fide` están protegidas con `mutex`.
+- La salida se serializa con un mutex.
+- Se valida la entrada y se verifica que `consumido + restante == inicial`.
+
+**Verificación:** con 8 fideos y 3 filósofos, la suma final fue correcta.
+Compila sin advertencias y ThreadSanitizer no reportó carreras.
+
+---
+
+## 7. Productor-consumidor
+
+**Carpeta:** `productor_consumidor/`.
+
+Los tres originales (`productores00–02`) solo tienen productores: no existe
+consumidor ni búfer, usan bucles infinitos, comparten `rand()` y entrelazan la
+salida.
+
+La versión mejorada implementa `BufferAcotado<T>` como monitor:
+
+- `queue<T>` con capacidad máxima.
+- `mutex` y dos variables de condición (`no_lleno`, `no_vacio`).
+- Esperas con predicado para tolerar despertares espurios.
+- `cerrar()` para que los consumidores vacíen el búfer y terminen.
+- Verificación de producidos = consumidos y distribución por letra idéntica.
+
+**Verificación:** 4 productores × 10 000 ítems = 40 000 producidos y 40 000
+consumidos, con resultado `OK`. ThreadSanitizer no reporta carreras. La carpeta
+incluye informe, capturas y evidencias reproducibles con `./run.sh`.
+
+---
+
+## 8. Cómo compilar y ejecutar
+
+```bash
+# Exclusión mutua
+g++ -std=c++17 -O2 -Wall -Wextra -pthread Exclusion_Mutua/exclusionmutua_MEJORADO.cpp -o exclusion
+./exclusion 5 1000000 0
+
+# Threads
+g++ -std=c++17 -O2 -Wall -Wextra -pthread Threads/threads_MEJORADO.cpp -o threads
+./threads 5
+
+# Monitores
+g++ -std=c++17 -O2 -Wall -Wextra -pthread Monitores/monitor04.cpp -o monitor
+./monitor
+
+# Filósofos
+g++ -std=c++17 -O2 -Wall -Wextra -pthread filosofos_comensales/filosofos.cpp -o filosofos
+printf '20\n5\n' | ./filosofos
+
+# Productor-consumidor
+cd productor_consumidor && ./run.sh
+```
+
+Para ThreadSanitizer, agregar `-fsanitize=thread` al comando de compilación.
+
+---
+
+## 9. Conclusiones
+
+1. Las cuatro ramas quedaron integradas en `main` sin conflictos.
+2. Todos los programas compilan con `-Wall -Wextra`; solo los originales de
+   exclusión mutua conservan la advertencia de una variable sin usar.
+3. Las versiones mejoradas sustituyen el manejo manual de hilos y mutex por
+   RAII, encapsulamiento y verificación de resultados.
+4. ThreadSanitizer confirma que las versiones mejoradas revisadas no presentan
+   condiciones de carrera.
+5. El repositorio queda con los cinco temas, sus versiones originales y
+   mejoradas, y la documentación del tema productor-consumidor.
