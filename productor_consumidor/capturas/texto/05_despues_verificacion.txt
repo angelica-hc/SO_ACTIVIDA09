@@ -1,0 +1,8 @@
+$ ./bin/prodcons 4 3 2 10000 0
+Consumidor-0 termino (13545 items)
+Consumidor-2 termino (13340 items)
+Consumidor-1 termino (13115 items)
+Producidos = 40000, consumidos = 40000, distribucion por letra IDENTICA -> OK
+
+# 4 productores x 10000 = 40000 items producidos y consumidos.
+# La verificacion final comprueba que no se perdio ni duplico ningun item.

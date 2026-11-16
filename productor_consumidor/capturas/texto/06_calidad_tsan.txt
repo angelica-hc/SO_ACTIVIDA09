@@ -1,0 +1,9 @@
+$ g++ -std=c++17 -O2 -Wall -Wextra -pthread \
+      mejorado/productor_consumidor_mejorado.cpp -o bin/prodcons
+# (sin advertencias)
+
+$ g++ -std=c++17 -O1 -g -fsanitize=thread -pthread \
+      mejorado/productor_consumidor_mejorado.cpp -o bin/prodcons_tsan
+$ ./bin/prodcons_tsan 3 3 2 500 0
+Producidos = 1500, consumidos = 1500, distribucion por letra IDENTICA -> OK
+(sin WARNING = ThreadSanitizer no detecta data races)

@@ -1,0 +1,4 @@
+== Compilacion con -fsanitize=thread ==
+== 3 productores, 3 consumidores, capacidad 2, 500 items c/u ==
+Producidos = 1500, consumidos = 1500, distribucion por letra IDENTICA -> OK
+(sin WARNING = ThreadSanitizer no detecta data races)
