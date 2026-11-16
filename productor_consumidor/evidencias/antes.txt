@@ -1,0 +1,77 @@
+######## EVIDENCIAS: PROGRAMAS ORIGINALES
+
+Los tres programas tienen bucles while(true): no terminan nunca.
+Por eso se ejecutan con 'timeout 2'; codigo 124 = matado por timeout.
+
+==================================================================
+== originales/productores00.cpp ==
+Comando: timeout 2 ./bin/productores00
+Codigo de salida: 124 (124 = el programa no termina solo)
+Lineas producidas en 2 s: 5295813
+--- primeras 6 lineas ---
+(1) Productor-0 estoy produciendo : n 
+(2) Productor-0 estoy produciendo : l 
+(3) Productor-0 estoy produciendo : r 
+(4) Productor-0 estoy produciendo : b 
+(5) Productor-0 estoy produciendo : b 
+(6) Productor-0 estoy produciendo : m 
+   [...]   (el bucle no termina)
+
+--- muestra donde aparece el segundo productor ---
+(1) Productor-1 estoy produciendo : w 
+(2) Productor-1 estoy produciendo : d 
+(3) Productor-1 estoy produciendo : d 
+(4) Productor-1 estoy produciendo : q 
+   [...]
+--- ultimas lineas completas ---
+(2587802) Productor-1 estoy produciendo : d 
+(2708010) Productor-0 estoy produciendo : f 
+
+==================================================================
+== originales/productores01.cpp ==
+Comando: timeout 2 ./bin/productores01
+Codigo de salida: 124 (124 = el programa no termina solo)
+Lineas producidas en 2 s: 5181944
+--- primeras 6 lineas ---
+(1) Productor-0 estoy produciendo : n 
+(2) Productor-0 estoy produciendo : l 
+(3) Productor-0 estoy produciendo : r 
+(4) Productor-0 estoy produciendo : b 
+(5) Productor-0 estoy produciendo : b 
+(6) Productor-0 estoy produciendo : m 
+   [...]   (el bucle no termina)
+
+--- muestra donde aparece el segundo productor ---
+(1) Productor-1 estoy produciendo : w 
+(2) Productor-1 estoy produciendo : d 
+(3) Productor-1 estoy produciendo : x 
+(4) Productor-1 estoy produciendo : r 
+   [...]
+--- ultimas lineas completas ---
+(2619076) Productor-1 estoy produciendo : v 
+(2562867) Productor-0 estoy produciendo : j 
+
+==================================================================
+== originales/productores02.cpp ==
+Comando: timeout 2 ./bin/productores02
+Codigo de salida: 124 (124 = el programa no termina solo)
+Lineas producidas en 2 s: 5094927
+--- primeras 6 lineas ---
+(1) Productor-0 estoy produciendo : n 
+(2) Productor-0 estoy produciendo : l 
+(3) Productor-0 estoy produciendo : r 
+(4) Productor-0 estoy produciendo : b 
+(5) Productor-0 estoy produciendo : b 
+(6) Productor-0 estoy produciendo : m 
+   [...]   (el bucle no termina)
+
+--- muestra donde aparece el segundo productor ---
+(1) Productor-1 estoy produciendo : w 
+(2) Productor-1 estoy produciendo : r 
+(3) Productor-1 estoy produciendo : j 
+(4) Productor-1 estoy produciendo : m 
+   [...]
+--- ultimas lineas completas ---
+(2543569) Productor-0 estoy produciendo : y 
+(2551357) Productor-1 estoy produciendo : m 
+

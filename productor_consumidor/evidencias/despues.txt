@@ -1,0 +1,46 @@
+######## EVIDENCIAS: VERSION MEJORADA
+
+== Compilacion con -Wall -Wextra (sin advertencias) ==
+
+== 2 productores, 2 consumidores, capacidad 5, 8 items c/u ==
+(1) Productor-0 produce: i
+(2) Productor-0 produce: k
+(3) Productor-0 produce: z
+(4) Productor-0 produce: y
+(5) Productor-0 produce: l
+(6) Productor-0 produce: s
+   Consumidor-0 consume: i
+   Consumidor-0 consume: k
+   Consumidor-0 consume: z
+   Consumidor-0 consume: y
+   Consumidor-0 consume: l
+   Consumidor-0 consume: s
+(1) Productor-1 produce: l
+   Consumidor-0 consume: z
+(2) Productor-1 produce: u
+   Consumidor-0 consume: u
+   Consumidor-0 consume: v
+   Consumidor-1 consume: l
+(3) Productor-1 produce: v
+(4) Productor-1 produce: m
+(5) Productor-1 produce: n
+(6) Productor-1 produce: r
+(7) Productor-1 produce: n
+   Consumidor-1 consume: m
+   Consumidor-0 consume: n
+   Consumidor-0 consume: r
+   Consumidor-1 consume: n
+   Consumidor-1 consume: q
+(7) Productor-0 produce: z
+(8) Productor-1 produce: q
+(8) Productor-0 produce: r
+   Consumidor-1 consume: r
+Consumidor-0 termino (11 items)
+Consumidor-1 termino (5 items)
+Producidos = 16, consumidos = 16, distribucion por letra IDENTICA -> OK
+
+== 4 productores, 3 consumidores, capacidad 2, 10000 items c/u ==
+Consumidor-0 termino (12519 items)
+Consumidor-1 termino (14103 items)
+Consumidor-2 termino (13378 items)
+Producidos = 40000, consumidos = 40000, distribucion por letra IDENTICA -> OK

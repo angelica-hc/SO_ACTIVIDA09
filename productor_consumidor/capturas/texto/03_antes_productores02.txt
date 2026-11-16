@@ -1,0 +1,23 @@
+$ timeout 2 ./bin/productores02
+(1) Productor-0 estoy produciendo : n 
+(2) Productor-0 estoy produciendo : l 
+(3) Productor-0 estoy produciendo : r 
+(4) Productor-0 estoy produciendo : b 
+(5) Productor-0 estoy produciendo : b 
+(6) Productor-0 estoy produciendo : m 
+   [...]   (el bucle no termina)
+
+(1) Productor-1 estoy produciendo : w 
+(2) Productor-1 estoy produciendo : o 
+(3) Productor-1 estoy produciendo : w 
+(4) Productor-1 estoy produciendo : f 
+   [...]
+(2632825) Productor-1 estoy produciendo : g 
+(2650243) Productor-0 estoy produciendo : i 
+(2632826) Productor-1 estoy produciendo : s 
+
+$ echo $?
+124    # hubo que matarlo con timeout: no termina solo
+
+# Lineas producidas en 2 s: 5283069
+# Solo hay productores: no existe consumidor ni buffer compartido.
